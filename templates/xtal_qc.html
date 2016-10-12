@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Crystal QC results</title>
+
+
+        <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div class="header">
+                <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="/">Home</a>
+                    </li>
+                    <li role="presentation"><a href="#">Sign In</a>
+                    </li>
+                    <li role="presentation"><a href="showSignUp">Sign Up</a>
+                    </li>
+                </ul>
+                </nav>
+                <h3 class="text-muted">Muon g-2 calorimeter database</h3>
+            </div>
+
+                <h3 class="text-muted">Lead Fluoride QC results</h3>
+
+            <table border="1" cellpadding="5" cellspacing="5">
+                <tr>
+                    <th>ID</th>
+                    <th>Serial#</th>
+                    <th>Location</th>
+                    <th>WidthLeft</th>
+                    <th>WidthRight</th>
+                    <th>HeightLeft</th>
+                    <th>HeightRight</th>
+                    <th>Length</th>
+                    <th>AvgTrans</th>
+                </tr>
+                {%- for id, serial_num, location, width_left, width_right, height_left, height_right, length, longitudinal_trans_avg_value in rows %}
+                <tr align="center">
+                    <td>{{ id }}</td>
+                    <td>{{ serial_num }}</td>
+                    <td>{{ location }}</td>
+                    <td>{{ width_right }}</td>
+                    <td>{{ width_left }}</td>
+                    <td>{{ height_right }}</td>
+                    <td>{{ height_left }}</td>
+                    <td>{{ length }}</td>
+                    <td>{{ longitudinal_trans_avg_value }}</td>
+                </tr>
+                {%- endfor %}
+            </table>
+
+            <footer class="footer">
+            <p>&copy; FNAL Muon g-2 2016</p>
+            </footer>
+
+        </div>
+    </body>
+
+</html>

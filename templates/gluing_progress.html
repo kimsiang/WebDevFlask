@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Gluing progress</title>
+
+
+        <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div class="header">
+                <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="/">Home</a>
+                    </li>
+                    <li role="presentation"><a href="#">Sign In</a>
+                    </li>
+                    <li role="presentation"><a href="showSignUp">Sign Up</a>
+                    </li>
+                </ul>
+                </nav>
+                <h3 class="text-muted">Muon g-2 calorimeter database</h3>
+            </div>
+
+            <h3 class="text-muted">Lead Fluoride and SiPM gluing progress</h3>
+ 
+             
+<!--            <form action="" method="post">
+                <label>
+                    Album name:
+                    <input type=text name=albumName>
+                </label><br>
+                <label>
+                    Album year:
+                    <input type=text name=albumYear>
+                </label><br>
+                <input type=submit value="Add album">
+            </form>
+            -->
+            <table border="1" cellpadding="2" cellspacing="2">
+                <tr align="center">
+                    <th>Calo#</th>
+                    <th>Glued?</th>
+                    <th>XtalSerial#</th>
+                    <th>SiPM#</th>
+                    <th>Height</th>
+                    <th>Width</th>
+                    <th>Reserved</th>
+                    <th>CaloRow</th>
+                    <th>CaloXtal#</th>
+                    <th>StartTime</th>
+                    <th>StopTime</th>
+                </tr>
+                {%- for calo_num, glued, xtal_serial_num, sipm_num, height, width, reserved,       calo_row, calo_xtal_num, start_time, stop_time in rows %}
+                <tr align="center">
+                    <td>{{ calo_num }}</td>
+                    <td>{{ glued }}</td>
+                    <td>{{ xtal_serial_num }}</td>
+                    <td>{{ sipm_num }}</td>
+                    <td>{{ height }}</td>
+                    <td>{{ width }}</td>
+                    <td>{{ reserved }}</td>
+                    <td>{{ calo_row }}</td>
+                    <td>{{ calo_xtal_num }}</td>
+                    <td>{{ start_time }}</td>
+                    <td>{{ stop_time }}</td>
+                </tr>
+                {%- endfor %}
+            </table>
+
+            <footer class="footer">
+            <p>&copy; FNAL Muon g-2 2016</p>
+            </footer>
+
+        </div>
+    </body>
+
+</html>
