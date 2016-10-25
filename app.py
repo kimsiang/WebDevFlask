@@ -42,7 +42,7 @@ def signUp():
 
 @app.route('/xtalQC')
 def xtalQC():
-    cursor.execute("SELECT id, serial_num, location, width_left, width_right, height_left, height_right, length, longitudinal_trans_avg_value from xtal_qc")
+    cursor.execute("SELECT xtal_qc_id, xtal_serial_num, location, width_left, width_right, height_left, height_right, length, longitudinal_trans_avg_value from xtal_qc")
 
     rows = cursor.fetchall()
     return render_template('xtal_qc.html', rows = rows)
