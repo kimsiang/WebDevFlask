@@ -1,137 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="{{ url_for('static',filename='ico/favicon.ico') }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="{{ url_for('static',filename='ico/favicon.ico') }}">
 
-    <title>Muon g-2 calorimeter database</title>
+        <title>Muon g-2 calorimeter database</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css')}}" rel="stylesheet">
+        <!-- Bootstrap core CSS -->
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+        <!-- Bootstrap theme -->
+        <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css')}}" rel="stylesheet">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet" type='text/css'>
-    <link href="{{ url_for('static', filename='css/panel.css') }}" rel="stylesheet" type='text/css'>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+        <!-- Custom styles for this template -->
+        <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet" type='text/css'>
+        <link href="{{ url_for('static', filename='css/panel.css') }}" rel="stylesheet" type='text/css'>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="{{ url_for('static', filename='js/ie-emulation-modes-warning.js') }}"> </script>
+        <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="{{ url_for('static', filename='js/ie-emulation-modes-warning.js') }}"> </script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 $(document).ready(function() {
 
-  $('#sbtn').click(function(event) {
-    /* Act on the event */
-    $.ajax({
-      url: 'ajaxreg',
-      type: 'POST',
-      dataType: 'json',
-      data: {username:$('#username').val(),password:$('#password').val(),email:$('#email').val()},
-      success:function(json)
-      {
-        alert(json.result);
+    $('#sbtn').click(function(event) {
+        /* Act on the event */
+        $.ajax({
+            url: 'ajaxreg',
+            type: 'POST',
+            dataType: 'json',
+            data: {username:$('#username').val(),password:$('#password').val(),email:$('#email').val()},
+            success:function(json)
+            {
+                alert(json.result);
 
-      }
+            }
+
+        });
 
     });
-
-  });
 });
-    </script>
+        </script>
 
 
-  </head>
+    </head>
 
-  <body>
+    <body>
 
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container noprint">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Calorimeter Database</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#theme">Theme</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Calorimeter Database</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#theme">Theme</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Nav header</li>
+                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
 
-    <div class="container theme-showcase" role="main"> 
-    <div class="no-print">
-      <p>
-      <a class="btn btn-lg btn-default" href="calorimeter">Calorimeter</a>
-      <a class="btn btn-lg btn-primary" href="crystalQC">Crystal</a>
-      <a class="btn btn-lg btn-success" href="sipm">SiPM</a>
-      <a class="btn btn-lg btn-info" href="beaglebone">Beaglebone</a>
-      <a class="btn btn-lg btn-warning" href="wfd5">WFD5</a>
-      <a class="btn btn-lg btn-danger" href="microtca">MicroTCA</a>
-      <a class="btn btn-lg btn-default" href="amc13">AMC13</a>
-      <a class="btn btn-lg btn-success" href="fiber">Fiber</a>
-      <a class="btn btn-lg btn-info" href="panel">Front Panel</a>
-      <a class="btn btn-lg btn-warning" href="bkprecision">BK</a>
-      <a class="btn btn-lg btn-default" href="gbrew">g-Brew</a>
-      </p>
-    </div>
-      <!-- Body here -->
-      {% block body %}{% endblock %}
+        <div class="container theme-showcase" role="main"> 
 
-      <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+            <p>
+            <a class="btn btn-lg btn-default" href="calorimeter">Calorimeter</a>
+            <a class="btn btn-lg btn-primary" href="crystalQC">Crystal</a>
+            <a class="btn btn-lg btn-success" href="sipm">SiPM</a>
+            <a class="btn btn-lg btn-info" href="beaglebone">Beaglebone</a>
+            <a class="btn btn-lg btn-warning" href="wfd5">WFD5</a>
+            <a class="btn btn-lg btn-danger" href="microtca">MicroTCA</a>
+            <a class="btn btn-lg btn-default" href="amc13">AMC13</a>
+            <a class="btn btn-lg btn-success" href="fiber">Fiber</a>
+            <a class="btn btn-lg btn-info" href="panel">Front Panel</a>
+            <a class="btn btn-lg btn-warning" href="bkprecision">BK</a>
+            <a class="btn btn-lg btn-default" href="gbrew">g-Brew</a>
+            </p>
+            <!-- Body here -->
+            {% block body %}{% endblock %}
 
-        <script src="{{ url_for('static', filename='js/docs.min.js') }}"> </script>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"> </script>
+            <!-- Bootstrap core JavaScript
+                ================================================== -->
+                <!-- Placed at the end of the document so the pages load faster -->
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
-        <script src="{{ url_for('static', filename='js/stupidtable.min.js') }}"> </script>
-        <script src="{{ url_for('static', filename='js/stupidtable.js') }}?dev "> </script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"> </script>
+                <script src="{{ url_for('static', filename='js/docs.min.js') }}"> </script>
+                <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"> </script>
 
-<script>
+                <script src="{{ url_for('static', filename='js/stupidtable.min.js') }}"> </script>
+                <script src="{{ url_for('static', filename='js/stupidtable.js') }}?dev "> </script>
+                <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+                <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"> </script>
+
+                <script>
 $(function(){
-  $("table").stupidtable();
+    $("table").stupidtable();
 });
-</script>
+                </script>
 
 
-        <footer class="footer">
-          <p>&copy; FNAL Muon g-2 2016</p>
-        </footer>
+                <footer class="footer">
+                    <p>&copy; FNAL Muon g-2 2016</p>
+                </footer>
 
-    </div>
-  </body>
+        </div>
+    </body>
 </html>

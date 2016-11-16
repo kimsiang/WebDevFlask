@@ -51,7 +51,7 @@ def signUp():
 @app.route('/calorimeter')
 def calorimeter():
 
-    cursor.execute("SELECT calorimeter_id FROM calorimeter")
+    cursor.execute("SELECT calorimeter_id, built_date FROM calorimeter")
 
     rows = cursor.fetchall()
     return render_template('calorimeter.html', rows = rows)
@@ -184,6 +184,12 @@ def show_histogram():
     rendered = render_template('histogram.html',
             height=height,figJS=figJS,figDiv=figDiv)
     return(rendered)
+
+
+@app.route('/circle')
+def circle():
+    return render_template('circle.html')
+
 
 @app.route('/')
 def main():

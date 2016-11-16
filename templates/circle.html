@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="{{ url_for('static', filename='css/circle.css')}}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/circle.js') }}"> </script>
+        <script src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        Number of fields: <input type="text" value="4" />
+        <button id="addone">++</button>
+        <button id="delone">--</button>
+        <div id="container">
+            <div id="center"></div>
+            <div id="crosshair-x"></div>
+            <div id="crosshair-y"></div>
+        </div>
+
+    </body>
+
+</html>
