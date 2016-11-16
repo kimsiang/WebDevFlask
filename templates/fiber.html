@@ -2,40 +2,46 @@
 
 {% block body %}	
 
-
 <div class="panel panel-default panel-table">
   <div class="panel-heading">
     <div class="row">
       <div class="col col-xs-6">
-        <h3 class="panel-title">Lead Fluoride and SiPM gluing progress</h3>
+        <h3 class="panel-title">Fiber</h3>
       </div>
       <div class="col col-xs-6 text-right">
-        <button type="button" class="btn btn-sm btn-primary btn-create">Create New</button>
+        <button type="button" class="btn btn-sm btn-primary">Edit</button>
+        <button type="button" class="btn btn-sm btn-primary">Create New</button>
       </div>
     </div>
   </div>
 
   <div class="panel-body">
     <div class="table-responsive">
-      <table class="table table-hover table-bordered table-list text-nowrap" id="stupidTable">
+      <table class="table table-hover table-bordered table-list text-nowrap">
         <thead>
-          <tr class="filter">
-            {% for col_name in col_names %}
-            <th data-sort="int">{{ col_name }}</th>
-            {% endfor %}
+          <tr class="filters">
+            <th class="text-center"><i class="fa fa-cog"></i></th>
+            <th>Bundle ID</th>
+            <th>Fiber ID</th>
+            <th>Pout</th>
+            <th>Prism ID</th>
           </tr>
         </thead>
 
         <tbody>
-          {% for row in rows %}
+          {%- for bundle_id, fiber_id, p_out, prism_id in rows%}
           <tr>
-            {% for d in row %}
-            <td>{{ d }}</td>
-            {% endfor %}
+            <td align="center">
+              <a class="btn btn-default"><i class="fa fa-pencil"></i></a>
+              <a class="btn btn-danger"><i class="fa fa-trash"></i></a>
+            </td>
+            <td>{{ bundle_id }}</td>
+            <td>{{ fiber_id }}</td>
+            <td>{{ p_out }}</td>
+            <td>{{ prism_id }}</td>
           </tr>
-          {% endfor %}
+          {%- endfor %}
         </tbody>
-
       </table>
 
     </div>
@@ -62,4 +68,5 @@
   </div>
 
 </div>
+
 {% endblock body %}

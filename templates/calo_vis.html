@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}	
+
+<style>td {float: right; width: 126.4px;}</style>
+<style>b {font-size: 14px; float: right;color: blue;}</style>
+<style>b2 {font-size: 20px;float: left;color: black;}</style>
+
+<center>
+<h2>Calo {{ caloNum }}</h2>
+
+<table class="table table-bordered" align="right">
+  {% set count = 0 %}
+  {% for crystal_serial_num, sipm_id, calo_xtal_num, reserved in rows %}
+  {% set count = count + 1 %} 
+  {% if count % 9 == 1 %}<tr>{% endif %}
+    <td>LOC: <b>{{ calo_xtal_num }}</b>
+      <br>Xtal: <b>{{ crystal_serial_num }}</b>
+      <br>SiPM: <b>{{ sipm_id }}</b>
+      <br>BEAG: <b>{{ reserved }}</b>
+      {% set slot1, slot2 =  reserved.split('-') %}
+      <br>SIG: <b></b> 
+      <br>HDMI: <b>{% if slot2|int > 10 %}S-{{ calo_xtal_num + 1 }} {% else %}L-{{ calo_xtal_num + 1 }} {% endif %}</b>
+    </td>
+    {% if calo_xtal_num % 9 == 0 %}</tr>{% endif %} 
+  {% endfor %}
+</table>
+
+</div>
+{% endblock body %}

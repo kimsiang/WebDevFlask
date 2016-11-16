@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block body %}	
+
+<div class="panel panel-default panel-table">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col col-xs-6">
+        <h3 class="panel-title">WFD5</h3>
+      </div>
+      <div class="col col-xs-6 text-right">
+        <button type="button" class="btn btn-sm btn-success btn-create">Create New</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-list text-nowrap" id="stupidTable">
+        <thead>
+          <tr class="filters">
+            <th class="text-center"><i class="fa fa-cog"></i></th>
+            <th data-sort="int">S/N</th>
+            <th data-sort="int">WFDPS S/N</th>
+            <th data-sort="int">AFN S/N</th>
+            <th data-sort="string">Deployment</th>
+            <th data-sort="string">MMC FWV</th>
+            <th data-sort="string">Golden FWV</th>
+            <th data-sort="string">Master FWV</th>
+            <th data-sort="string">Channel FWV</th>
+            <th data-sort="string">Location</th>
+            <th data-sort="string">Owner</th>
+            <th data-sort="string">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {%- for serial_number, wfdps_sn, afe_sn, deployment, mmc_fwv, golden_fwv, master_fwv, channel_fwv, location, owner, status in rows%}
+          <tr>
+            <td align="center">
+              <a class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+            </td>
+            <td>{{ serial_number }}</td>
+            <td>{{ wfdps_sn }}</td>
+            <td>{{ afe_sn }}</td>
+            <td>{{ deployment }}</td>
+            <td>{{ mmc_fwv }}</td>
+            <td>{{ golden_fwv }}</td>
+            <td>{{ master_fwv }}</td>
+            <td>{{ channel_fwv }}</td>
+            <td>{{ location }}</td>
+            <td>{{ owner }}</td>
+            <td>{{ status }}</td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col col-xs-4">Page 1 of 5
+      </div>
+      <div class="col col-xs-8">
+        <ul class="pagination hidden-xs pull-right">
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+        </ul>
+        <ul class="pagination visible-xs pull-right">
+          <li><a href="#">«</a></li>
+          <li><a href="#">»</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock body %}

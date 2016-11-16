@@ -1,13 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}	
-
-
 <div class="panel panel-default panel-table">
   <div class="panel-heading">
     <div class="row">
       <div class="col col-xs-6">
-        <h3 class="panel-title">Lead Fluoride and SiPM gluing progress</h3>
+        <h3 class="panel-title">Front Panel</h3>
       </div>
       <div class="col col-xs-6 text-right">
         <button type="button" class="btn btn-sm btn-primary btn-create">Create New</button>
@@ -17,25 +15,31 @@
 
   <div class="panel-body">
     <div class="table-responsive">
-      <table class="table table-hover table-bordered table-list text-nowrap" id="stupidTable">
+      <table class="table table-hover table-bordered table-list text-nowrap">
         <thead>
-          <tr class="filter">
-            {% for col_name in col_names %}
-            <th data-sort="int">{{ col_name }}</th>
-            {% endfor %}
+          <tr class="filters">
+            <th class="text-center"><i class="fa fa-cog"></i></th>
+            <th>Panel ID</th>
+            <th>Bundle ID</th>
+            <th>Bending close</th>
+            <th>Bending far</th>
           </tr>
         </thead>
 
         <tbody>
-          {% for row in rows %}
+          {%- for panel_id, bundle_id, bending_close, bending_far in rows%}
           <tr>
-            {% for d in row %}
-            <td>{{ d }}</td>
-            {% endfor %}
+            <td align="center">
+              <a class="btn btn-default"><i class="fa fa-pencil"></i></a>
+              <a class="btn btn-danger"><i class="fa fa-trash"></i></a>
+            </td>
+            <td>{{ panel_id }}</td>
+            <td>{{ bundle_id }}</td>
+            <td>{{ bending_close }}</td>
+            <td>{{ bending_far }}</td>
           </tr>
-          {% endfor %}
+          {%- endfor %}
         </tbody>
-
       </table>
 
     </div>
@@ -62,4 +66,6 @@
   </div>
 
 </div>
+
 {% endblock body %}
+
