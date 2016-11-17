@@ -2,7 +2,7 @@
 
 {% block body %}	
 
-<style>td {float: right; width: 126.4px}</style>
+<style>td {float: right; width: 11.11%}</style>
 <style>b {font-size: 13px; float: right;color: blue;}</style>
 <style>b2 {font-size: 13px;float: left;color: black;}</style>
 
@@ -15,6 +15,7 @@
         <a class="fa fa-caret-square-o-right fa-lg" aria-hidden="true" href="/calo_vis/{{ caloNum|int + 1 }}"></a>
         {% endif %}
         <br>
+        <div class="page-break"></div>
         Calorimeter {{ caloNum }}
 </h2>
 
@@ -35,10 +36,10 @@
     {% endfor %}
 </table>
 
-Generated: <p id="demo"></p>
+<p id="demo"></p>
 
 <script>
-document.getElementById("demo").innerHTML = Date();
+document.getElementById("demo").innerHTML = 'Generated: ' + Date();
 </script>
 
 {% endblock body %}

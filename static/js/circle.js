@@ -11,7 +11,7 @@ $(document).ready(function createFields() {
 });
 
 $(document).ready(function distributeFields() {
-    var radius = 260;
+    var radius = 270;
     var fields = $('.field'), container = $('#container'),
     width = container.width(), height = container.height(),
     angle = 0, step = (2*Math.PI) / fields.length;
