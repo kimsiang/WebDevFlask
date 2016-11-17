@@ -8,8 +8,15 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="icon" href="{{ url_for('static',filename='ico/favicon.ico') }}">
+        <link href="{{ url_for('static', filename='css/circle.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/pagebreak.css')}}" rel="stylesheet">
 
         <title>Muon g-2 calorimeter database</title>
+
+        <style type="text/css" media="print" >
+.nonPrintable{display:none;} /*class for the element we don’t want to print*/
+        </style>
+
 
         <!-- Bootstrap core CSS -->
         <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
@@ -56,7 +63,7 @@ $(document).ready(function() {
     <body>
 
         <!-- Fixed navbar -->
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-inverse navbar-fixed-top nonPrintable">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -92,18 +99,20 @@ $(document).ready(function() {
         <div class="container theme-showcase" role="main"> 
 
             <p>
-            <a class="btn btn-lg btn-default" href="calorimeter">Calorimeter</a>
-            <a class="btn btn-lg btn-primary" href="crystalQC">Crystal</a>
-            <a class="btn btn-lg btn-success" href="sipm">SiPM</a>
-            <a class="btn btn-lg btn-info" href="beaglebone">Beaglebone</a>
-            <a class="btn btn-lg btn-warning" href="wfd5">WFD5</a>
-            <a class="btn btn-lg btn-danger" href="microtca">MicroTCA</a>
-            <a class="btn btn-lg btn-default" href="amc13">AMC13</a>
-            <a class="btn btn-lg btn-success" href="fiber">Fiber</a>
-            <a class="btn btn-lg btn-info" href="panel">Front Panel</a>
-            <a class="btn btn-lg btn-warning" href="bkprecision">BK</a>
-            <a class="btn btn-lg btn-default" href="gbrew">g-Brew</a>
+            <a class="btn btn-lg btn-default" href="/calorimeter">Calorimeter</a>
+            <a class="btn btn-lg btn-primary" href="/crystalQC">Crystal</a>
+            <a class="btn btn-lg btn-success" href="/sipm">SiPM</a>
+            <a class="btn btn-lg btn-info" href="/beaglebone">Beaglebone</a>
+            <a class="btn btn-lg btn-warning" href="/wfd5">WFD5</a>
+            <a class="btn btn-lg btn-danger" href="/microtca">MicroTCA</a>
+            <a class="btn btn-lg btn-default" href="/amc13">AMC13</a>
+            <a class="btn btn-lg btn-success" href="/fiber">Fiber</a>
+            <a class="btn btn-lg btn-info" href="/panel">Front Panel</a>
+            <a class="btn btn-lg btn-warning" href="/bkprecision">BK</a>
+            <a class="btn btn-lg btn-default" href="/gbrew">g-Brew</a>
             </p>
+            
+            <div class="page-break"></div>
             <!-- Body here -->
             {% block body %}{% endblock %}
 
@@ -111,6 +120,7 @@ $(document).ready(function() {
                 ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+                <script src="{{ url_for('static', filename='js/circle.js')}}"></script>
 
                 <script src="{{ url_for('static', filename='js/docs.min.js') }}"> </script>
                 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"> </script>

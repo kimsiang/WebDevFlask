@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block body %}	
+
+<div class="panel panel-default panel-table">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col col-xs-6">
+        <h3 class="panel-title">Pentapus QC</h3>
+      </div>
+      <div class="col col-xs-6 text-right">
+        <button type="button" class="btn btn-sm btn-primary">Create New</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-hover table-condensed table-bordered table-list text-nowrap">
+        <thead>
+          <tr class="filters">
+            <th>Cable ID</th>
+            <th>Impedence J2</th>
+            <th>Impedence J3</th>
+            <th>Impedence J4</th>
+            <th>Impedence J5</th>
+            <th>Impedence J6</th>
+            <th>Mean</th>
+            <th>Max-Min</th>
+            <th>Bad?</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {%- for cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, impedence_j6, mean, max_min in rows%}
+          <tr>
+            <td>{{ cable_id }}</td>
+            <td>{{ impedence_j2 }}</td>
+            <td>{{ impedence_j3 }}</td>
+            <td>{{ impedence_j4 }}</td>
+            <td>{{ impedence_j5 }}</td>
+            <td>{{ impedence_j6 }}</td>
+            <td>{{ mean }}</td>
+            <td>{{ max_min }}</td>
+            <td>{% if mean >= 98 %}Y{% endif%}</td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock body %}

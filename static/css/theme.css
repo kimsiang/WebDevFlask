@@ -16,3 +16,8 @@ body {
 .theme-showcase .navbar .container {
     width: auto;
 }
+@media print {
+    a[href]:after {
+        content: none !important;
+    }
+}

@@ -2,29 +2,43 @@
 
 {% block body %}	
 
-<style>td {float: right; width: 126.4px;}</style>
-<style>b {font-size: 14px; float: right;color: blue;}</style>
-<style>b2 {font-size: 20px;float: left;color: black;}</style>
+<style>td {float: right; width: 126.4px}</style>
+<style>b {font-size: 13px; float: right;color: blue;}</style>
+<style>b2 {font-size: 13px;float: left;color: black;}</style>
 
-<center>
-<h2>Calo {{ caloNum }}</h2>
 
-<table class="table table-bordered" align="right">
-  {% set count = 0 %}
-  {% for crystal_serial_num, sipm_id, calo_xtal_num, reserved in rows %}
-  {% set count = count + 1 %} 
-  {% if count % 9 == 1 %}<tr>{% endif %}
-    <td>LOC: <b>{{ calo_xtal_num }}</b>
-      <br>Xtal: <b>{{ crystal_serial_num }}</b>
-      <br>SiPM: <b>{{ sipm_id }}</b>
-      <br>BEAG: <b>{{ reserved }}</b>
-      {% set slot1, slot2 =  reserved.split('-') %}
-      <br>SIG: <b></b> 
-      <br>HDMI: <b>{% if slot2|int > 10 %}S-{{ calo_xtal_num + 1 }} {% else %}L-{{ calo_xtal_num + 1 }} {% endif %}</b>
-    </td>
-    {% if calo_xtal_num % 9 == 0 %}</tr>{% endif %} 
-  {% endfor %}
+<h2 align="center">
+        {% if caloNum|int > 1 %}
+        <a class="fa fa-caret-square-o-left fa-lg" aria-hidden="true" href="/calo_vis/{{ caloNum|int - 1 }}"></a>
+        {% endif %}
+        {% if caloNum|int < 24 %}
+        <a class="fa fa-caret-square-o-right fa-lg" aria-hidden="true" href="/calo_vis/{{ caloNum|int + 1 }}"></a>
+        {% endif %}
+        <br>
+        Calorimeter {{ caloNum }}
+</h2>
+
+<table class="table table-hover table-condensed table-bordered">
+    {% set count = 0 %}
+    {% for crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable in rows %}
+    {% set count = count + 1 %} 
+    {% if count % 9 == 1 %}<tr>{% endif %}
+            <td><b2>LOC:</b2> <b>{{ calo_xtal_num }}</b>
+            <br><b2>Xtal:</b2> <b>{{ crystal_serial_num }}</b>
+            <br><b2>SiPM:</b2> <b>{{ sipm_id }}</b>
+            <br><b2>BEAG:</b2> <b>{{ breakoutboard }}</b>
+            {% set slot1, slot2 =  breakoutboard.split('-') %}
+            <br><b2>SIG:</b2> <b>{{ pentapus_cable }}</b> 
+            <br><b2>HDMI:</b2> <b>{% if slot2|int > 10 %}S-{{ calo_xtal_num + 1 }} {% else %}L-{{ calo_xtal_num + 1 }} {% endif %}</b>
+        </td>
+        {% if calo_xtal_num % 9 == 0 %}</tr>{% endif %} 
+    {% endfor %}
 </table>
 
-</div>
+Generated: <p id="demo"></p>
+
+<script>
+document.getElementById("demo").innerHTML = Date();
+</script>
+
 {% endblock body %}
