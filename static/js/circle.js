@@ -1,20 +1,20 @@
-$(document).ready(function createFields() {
+function createFields() {
     $('.field').remove();
     var container = $('#container');
     for(var i = 0; i < +$('input:text').val(); i++) {
-        $('<a class='btn'/>', {
-            'class': 'field',
+        $('<a/>', {
+            'class': 'field btn btn-primary',
             'text': i + 1,
             'href': '/calo_vis/' + (i+1).toString()
         }).appendTo(container);
     }
-});
+}
 
-$(document).ready(function distributeFields() {
+function distributeFields() {
     var radius = 270;
     var fields = $('.field'), container = $('#container'),
     width = container.width(), height = container.height(),
-    angle = 0, step = (2*Math.PI) / fields.length;
+    angle = -Math.PI/2, step = (2*Math.PI) / fields.length;
     fields.each(function() {
         var x = Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2);
         var y = Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2);
@@ -27,7 +27,7 @@ $(document).ready(function distributeFields() {
         });
         angle += step;
     });
-});
+}
 
 $('input').change(function() {
     createFields();
