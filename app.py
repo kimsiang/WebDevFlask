@@ -63,6 +63,14 @@ def sipm():
     rows = cursor.fetchall()
     return render_template('sipm.html', rows = rows)
 
+@app.route('/sipmQC')
+def sipmQC():
+
+    cursor.execute("SELECT run_no, subrun_no, sipm_id, volt, curr, temp, gain, amp_avg FROM sipm_qc_result WHERE run_type = 'led' and sipm_id > 0 and subrun_no = 1 ORDER by sipm_id")
+
+    rows = cursor.fetchall()
+    return render_template('sipm_qc.html', rows = rows)
+
 
 @app.route('/crystalQC')
 def crystalQC():
@@ -204,4 +212,4 @@ def main():
 
 if __name__ == "__main__":
     app.debug=True
-    app.run(host='0.0.0.0', port=5555)
+    app.run(host='0.0.0.0', port=8888)
