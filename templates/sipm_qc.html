@@ -24,6 +24,7 @@
             <th class="text-center"><i class="fa fa-cog"></i></th>
             <th>RunNum</th>
             <th>SubrunNum</th>
+            <th>Date</th>
             <th>SiPM ID</th>
             <th>Volt</th>
             <th>Current</th>
@@ -34,7 +35,7 @@
         </thead>
 
         <tbody>
-          {%- for run_no, subrun_no, sipm_id, volt, curr, temp, gain, amp_avg in rows %}
+          {%- for run_no, subrun_no, date, sipm_id, volt, curr, temp, gain, amp_avg in rows %}
           <tr>
             <td align="center">
               <a class="btn btn-default"><i class="fa fa-pencil"></i></a>
@@ -42,6 +43,7 @@
             </td>
             <td>{{ run_no }}</td>
             <td>{{ subrun_no }}</td>
+            <td>{{ date }}</td>
             <td>{{ sipm_id }}</td>
             <td>{{ volt }}</td>
             <td>{{ curr }}</td>
@@ -58,15 +60,13 @@
 
   <div class="panel-footer">
     <div class="row">
-      <div class="col col-xs-4">Page 1 of 5
+        <div class="col col-xs-2">Page {{ page }} of {{ total+1 }}
       </div>
-      <div class="col col-xs-8">
+      <div class="col col-xs-10">
         <ul class="pagination hidden-xs pull-right">
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
+            {% for i in range(total+1) %}
+            <li><a href="/sipmQC/{{ i+1 }}">{{ i+1 }}</a></li>
+            {% endfor %}
         </ul>
         <ul class="pagination visible-xs pull-right">
           <li><a href="#">«</a></li>

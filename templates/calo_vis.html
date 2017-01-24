@@ -21,7 +21,7 @@
 
 <table class="table table-hover table-condensed table-bordered">
     {% set count = 0 %}
-    {% for crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable in rows %}
+    {% for crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, amp_avg in rows %}
     {% set count = count + 1 %} 
     {% if count % 9 == 1 %}<tr>{% endif %}
             <td><b2>LOC:</b2> <b>{{ calo_xtal_num }}</b>
@@ -31,7 +31,8 @@
             {% set slot1, slot2 =  breakoutboard.split('-') %}
             <br><b2>SIG:</b2> <b>{{ pentapus_cable }}</b> 
             <br><b2>HDMI:</b2> <b>{% if slot2|int > 10 %}S-{{ calo_xtal_num + 1 }} {% else %}L-{{ calo_xtal_num + 1 }} {% endif %}</b>
-        </td>
+                     <br><b2>AvgAmp(QC):</b2> <b>{{ amp_avg }}</b> 
+            </td>
         {% if calo_xtal_num % 9 == 0 %}</tr>{% endif %} 
     {% endfor %}
 </table>
