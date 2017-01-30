@@ -79,11 +79,17 @@ def crystalQC():
     rows = cursor.fetchall()
     return render_template('crystal_qc.html', rows = rows)
 
+@app.route('/pentapusQC')
+def pentapusQC():
+    cursor.execute("SELECT cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, impedence_j6, mean, max_min FROM pentapus_qc")
+
+    rows = cursor.fetchall()
+    return render_template('pentapus_qc.html', rows = rows)
 
 @app.route('/gluingProgress')
 def gluingProgress():
 
-    cursor.execute("SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, breakoutboard, pentapus_cable, calo_xtal_num, start_time, stop_time FROM gluing_progress")
+    cursor.execute("SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, breakoutboard, pentapus_cable, pentapus_subcable, calo_xtal_num, start_time, stop_time FROM gluing_progress")
     col_names = [i[0] for i in cursor.description]
 
     rows = cursor.fetchall()
@@ -158,7 +164,7 @@ def panel():
 @app.route('/calo_vis/<caloNum>')
 def calo_vis(caloNum):
 
-    cursor.execute("SELECT crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable FROM gluing_progress WHERE calo_id = {0} ORDER BY calo_xtal_num DESC".format(caloNum))
+    cursor.execute("SELECT crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, pentapus_subcable FROM gluing_progress WHERE calo_id = {0} ORDER BY calo_xtal_num DESC".format(caloNum))
 
     col_names = [i[0] for i in cursor.description]
 
