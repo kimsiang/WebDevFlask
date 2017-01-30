@@ -88,11 +88,17 @@ def crystalQC():
     rows = cursor.fetchall()
     return render_template('crystal_qc.html', rows = rows)
 
+@app.route('/pentapusQC')
+def pentapusQC():
+    cursor.execute("SELECT cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, impedence_j6, mean, max_min FROM pentapus_qc")
+
+    rows = cursor.fetchall()
+    return render_template('pentapus_qc.html', rows = rows)
 
 @app.route('/gluingProgress')
 def gluingProgress():
 
-    cursor.execute("SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, breakoutboard, pentapus_cable, calo_xtal_num, start_time, stop_time FROM gluing_progress")
+    cursor.execute("SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, breakoutboard, pentapus_cable, pentapus_subcable, calo_xtal_num, start_time, stop_time FROM gluing_progress")
     col_names = [i[0] for i in cursor.description]
 
     rows = cursor.fetchall()
@@ -166,8 +172,7 @@ def panel():
 
 @app.route('/calo_vis/<caloNum>')
 def calo_vis(caloNum):
-
-    cursor.execute('SELECT crystal_serial_num, tab1.sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, amp_avg FROM gluing_progress AS tab1 INNER JOIN sipm_qc_result AS tab2 ON tab1.sipm_id = tab2.sipm_id AND tab1.calo_id = {0} AND tab2.run_type = "led" AND tab2.subrun_no = 1 AND tab2.amp_avg < 100 GROUP by tab1.sipm_id ORDER BY tab1.calo_xtal_num DESC'.format(caloNum))
+    cursor.execute('SELECT crystal_serial_num, tab1.sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, pentapus_subcable, amp_avg FROM gluing_progress AS tab1 INNER JOIN sipm_qc_result AS tab2 ON tab1.sipm_id = tab2.sipm_id AND tab1.calo_id = {0} AND tab2.run_type = "led" AND tab2.subrun_no = 1 AND tab2.amp_avg < 100 GROUP by tab1.sipm_id ORDER BY tab1.calo_xtal_num DESC'.format(caloNum))
 
     col_names = [i[0] for i in cursor.description]
 

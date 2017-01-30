@@ -1,5 +1,5 @@
 body { padding: 2em; }
-#container { width: 600px; height: 600px; border: 1px solid #000; position: relative; border-radius: 50%;}
+#container { width: 600px; height: 600px; border: 1px solid #000; position: relative; border-radius: 50%; background:url("static/images/vacuumchamber.png");}
 #center { width: 10px; height: 10px; position: absolute; left: 295px; top: 295px; background: #000; }
 .field { width: 30px; height: 30px; position: absolute; background: #F0F8FF; text-align: center; vertical-align: middle; line-height: 30px; border:solid; }
 #crosshair-x { width: 600px; height: 1px; background: #000; position: absolute; left: 0; top: 300px; }
