@@ -7,17 +7,6 @@ mysql = MySQL()
 
 app = Flask(__name__)
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'gm2_reader'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'gm2_4_reader'
-app.config['MYSQL_DATABASE_DB'] = 'gm2_calorimeter_db'
-app.config['MYSQL_DATABASE_HOST'] = 'fnalmysqldev.fnal.gov'
-app.config['MYSQL_DATABASE_PORT'] = 3313
-
-#app.config['MYSQL_DATABASE_USER'] = 'root'
-#app.config['MYSQL_DATABASE_PASSWORD'] = ''
-#app.config['MYSQL_DATABASE_DB'] = 'gm2_calorimeter_db'
-#app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-
 
 mysql.init_app(app)
 
