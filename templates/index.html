@@ -1,58 +1,21 @@
 {% extends "layout.html" %}
-
-{% block body %}	
-
-
-<br>
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-    <h2>Muon g-2 calorimeter database</h2>
-    <p>This is a web client for accessing the Muon g-2 calorimeter database. It is still under development.</p>
-</div>
-
-<div class="page-header">
-    <h1>Support Tables</h1>
-</div>
-
-
-<div class="row">
-    <div class="col-lg-6">
-        <h4><a href="crystalQC">Lead Fluoride Crystals QC</a></h4>
-        <p>Database for the crystals qc</p>
-
-        <h4><a href="gluingProgress">Gluing progress</a></h4>
-        <p>Database for the crystal+SiPM gluing progress</p>
-
-
-    </div>
-
-    <div class="col-lg-6">
-
-        <h4><a href="sipmQC">SiPM QC</a></h4>
-        <p>Database for the sipm qc</p>
-
-        <h4><a href="pentapusQC">Pentapus cable QC</a></h4>
-        <p>Database for the pentapus qc</p>
-
-    </div>
-
-</div>  <!-- Row marketing -->
-
-<div class="page-header">
-    <h1>Alerts (Under Development)</h1>
-</div>
-<div class="alert alert-success" role="alert">
-    <strong>Well done!</strong> You successfully read this important alert message.
-</div>
-<div class="alert alert-info" role="alert">
-    <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
-</div>
-<div class="alert alert-warning" role="alert">
-    <strong>Warning!</strong> Best check yo self, you're not looking too good.
-</div>
-<div class="alert alert-danger" role="alert">
-    <strong>Oh snap!</strong> Change a few things up and try submitting again.
-</div>
-
-{% endblock body %}
+{% set title = "Overview" %}
+{% block body %}
+<section class="hero">
+  <p class="eyebrow">Muon g-2 · detector records</p>
+  <h1>Calorimeter database</h1>
+  <p>Browse component inventories, trace crystal–SiPM assembly, and inspect quality-control measurements.</p>
+  <div class="hero-actions"><a class="button button-light" href="{{ url_for('calorimeter') }}">Browse calorimeters <span aria-hidden="true">→</span></a><a class="button button-outline" href="{{ url_for('circle') }}">Calorimeter selector</a></div>
+</section>
+<section aria-labelledby="qc-heading">
+  <div class="section-heading"><h2 id="qc-heading">Quality control &amp; assembly</h2><span class="muted">Follow a component from measurement to installation</span></div>
+  <div class="card-grid">
+    <a class="record-card" href="{{ url_for('crystalQC') }}"><span class="card-category">Crystals</span><h3>Lead fluoride QC</h3><p>Dimensions, locations and longitudinal transmission.</p><span class="card-link">Open crystal records <span aria-hidden="true">→</span></span></a>
+    <a class="record-card" href="{{ url_for('sipmQC') }}"><span class="card-category">Photosensors</span><h3>SiPM QC results</h3><p>LED runs, bias conditions, gain and average amplitude.</p><span class="card-link">Open SiPM results <span aria-hidden="true">→</span></span></a>
+    <a class="record-card" href="{{ url_for('gluingProgress') }}"><span class="card-category">Assembly</span><h3>Gluing progress</h3><p>Crystal–SiPM pairings, component locations and assembly records.</p><span class="card-link">Open assembly records <span aria-hidden="true">→</span></span></a>
+    <a class="record-card" href="{{ url_for('pentapusQC') }}"><span class="card-category">Cabling</span><h3>Pentapus cable QC</h3><p>Connector impedance measurements and the recorded comparison flag.</p><span class="card-link">Open cable results <span aria-hidden="true">→</span></span></a>
+  </div>
+</section>
+<section class="summary-panel" aria-labelledby="analysis-heading"><div><p class="eyebrow">Measurement overview</p><h2 id="analysis-heading">Assembly height distribution</h2><p class="muted">Inspect the recorded height values and their frequency distribution.</p></div><a class="button" href="{{ url_for('show_histogram') }}">View histogram <span aria-hidden="true">→</span></a></section>
+<p class="source-note">Database pages require a configured connection and access to the database network. This viewer displays existing records; it does not create or edit them.</p>
+{% endblock %}

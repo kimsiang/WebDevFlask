@@ -1,0 +1,3 @@
+# Validated runtime versions. Use Python 3.11+ in a virtual environment.
+Flask==3.1.3
+PyMySQL==1.1.3
