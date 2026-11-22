@@ -36,7 +36,7 @@
       {% endfor %}
     </div>
   </div>
-  <p class="panel-note">* HDMI uses the legacy breakout-board suffix rule where that value can be parsed. Missing QC amplitude means no matching eligible QC result.</p>
+  <p class="panel-note">QC amplitude uses the highest eligible run number for each SiPM: LED, subrun 1, amplitude &lt; 100. Tied records are flagged; a missing amplitude means no eligible QC result. * HDMI uses the legacy breakout-board suffix rule where that value can be parsed.</p>
   {% if invalid_rows %}<p class="notice">{{ invalid_rows|length }} records have a missing or invalid location. They are retained in the detailed table below.</p>{% endif %}
 </section>
 {% with title = 'Detailed assignments', description = 'All returned rows are shown, including duplicate and invalid-location records.', headers = ['Crystal serial number', 'SiPM ID', 'Location', 'Breakout board', 'Pentapus cable', 'Pentapus subcable', 'AvgAmp (QC)'], secondary_table = true %}

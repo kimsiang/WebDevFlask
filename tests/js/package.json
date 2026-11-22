@@ -1,0 +1,14 @@
+{
+  "name": "webdevflask-browser-logic-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test table.test.mjs"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "31.0.1"
+  }
+}
