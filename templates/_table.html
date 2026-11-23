@@ -1,0 +1,48 @@
+<section class="data-panel" aria-labelledby="records-title">
+  <header class="panel-heading">
+    <div><p class="eyebrow">Database records</p>{% if secondary_table %}<h2 id="records-title">{{ title }}</h2>{% else %}<h1 id="records-title">{{ title }}</h1>{% endif %}{% if description %}<p class="muted">{{ description }}</p>{% endif %}</div>
+    <span class="badge">Read only</span>
+  </header>
+  <div class="table-toolbar" data-table-toolbar hidden>
+    <label for="table-filter">Filter displayed rows</label>
+    <input id="table-filter" type="search" placeholder="Search any column" autocomplete="off" data-table-filter aria-controls="records-table">
+    <span class="row-count" data-row-count role="status" aria-live="polite">{{ rows|length }} rows displayed</span>
+  </div>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="{{ title }} data table">
+    <table id="records-table" data-records-table>
+      <caption class="sr-only">{{ title }}. {% if page is defined %}Page {{ page }} of {{ total_pages }}. {% endif %}Values are shown as recorded in the source database.</caption>
+      <thead><tr>
+        {% for label in headers %}<th scope="col">{{ label }}</th>{% endfor %}
+        {% if pentapus_status %}<th scope="col">Mean ≥ 98</th>{% endif %}
+      </tr></thead>
+      <tbody>
+        {% for row in rows %}
+        <tr data-record-row>
+          {% for value in row %}
+          <td{% if value is number %} class="numeric"{% endif %}>
+            {% if value is none %}<span class="missing" title="Not recorded">—</span>
+            {% elif calorimeter_links and loop.first %}<a href="{{ url_for('calo_vis', caloNum=value) }}">{{ value }}</a>
+            {% else %}{{ value }}{% endif %}
+          </td>
+          {% endfor %}
+          {% if pentapus_status %}<td>{% if row[6] is none %}<span class="missing" title="Not recorded">—</span>{% elif row[6] >= 98 %}<span class="flag">Yes</span>{% else %}No{% endif %}</td>{% endif %}
+        </tr>
+        {% else %}
+        <tr class="empty-row"><td colspan="{{ headers|length + (1 if pentapus_status else 0) }}">No records are available for this selection.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="filter-empty" data-filter-empty hidden>No displayed rows match your filter. Clear the search to see all loaded rows.</p>
+  <footer class="table-footer">
+    {% if page is defined %}
+    <span>{{ total_entries }} records · Page {{ page }} of {{ total_pages }}</span>
+    <nav class="pagination" aria-label="SiPM QC results pages">
+      {% if page > 1 %}<a href="{{ url_for('sipmQC', page=1) }}">First</a><a href="{{ url_for('sipmQC', page=page - 1) }}" rel="prev">Previous</a>{% else %}<span aria-disabled="true">First</span><span aria-disabled="true">Previous</span>{% endif %}
+      <span class="page-current" aria-current="page">{{ page }}</span>
+      {% if page < total_pages %}<a href="{{ url_for('sipmQC', page=page + 1) }}" rel="next">Next</a><a href="{{ url_for('sipmQC', page=total_pages) }}">Last</a>{% else %}<span aria-disabled="true">Next</span><span aria-disabled="true">Last</span>{% endif %}
+    </nav>
+    {% else %}<span>{{ rows|length }} records loaded</span>{% endif %}
+    <span class="muted">{% if page is defined %}Search and sorting apply to this page.{% else %}Search and sorting apply to loaded rows.{% endif %}</span>
+  </footer>
+</section>

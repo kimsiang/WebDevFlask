@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% set title = title|default("Unable to load this page") %}
+{% block body %}
+<section class="message-panel" aria-labelledby="page-title"><p class="eyebrow">{{ status_code|default("Request unavailable") }}</p><h1 id="page-title">{{ title }}</h1><p>{{ message|default("The requested page is unavailable. Please return to the overview and try again.") }}</p><a class="button" href="{{ url_for('main') }}">Return to overview</a></section>
+{% endblock %}

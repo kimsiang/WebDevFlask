@@ -1,14 +1,38 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Album list</title>
-        <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.css" type="text/css">
-        <script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.js"></script>
-        {{ figJS|safe }}
-    </head>
-    <body>
-        <div class='bokeh'>
-            {{ figDiv|safe }}
-        </div>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% set title = "Assembly height distribution" %}
+{% block body %}
+<section class="data-panel" aria-labelledby="page-title">
+  <header class="panel-heading"><div><p class="eyebrow">Assembly measurements</p><h1 id="page-title">Assembly height distribution</h1><p class="muted">Frequency of the height values recorded in the gluing-progress table.</p></div><a class="button button-secondary" href="{{ url_for('gluingProgress') }}">View source records</a></header>
+  <div class="chart-meta"><span><strong>{{ count }}</strong> valid measurements</span><span><strong>{{ skipped }}</strong> missing or invalid values excluded</span>{% if bins %}<span><strong>{{ bins|length }}</strong> equal-width bins</span>{% endif %}</div>
+  {% if count and bins %}
+  {% set peak = bins|map(attribute='count')|max %}
+  {% set bar_width = 760 / bins|length %}
+  <figure class="histogram">
+    <svg viewBox="0 0 860 340" role="img" aria-labelledby="histogram-title histogram-description">
+      <title id="histogram-title">Assembly height distribution</title>
+      <desc id="histogram-description">Histogram of {{ count }} finite height measurements. Exact bin bounds and counts are listed in the table below.</desc>
+      <line x1="64" y1="262" x2="824" y2="262" class="chart-axis" />
+      <line x1="64" y1="62" x2="64" y2="262" class="chart-axis" />
+      <line x1="64" y1="62" x2="824" y2="62" class="chart-gridline" />
+      <line x1="64" y1="162" x2="824" y2="162" class="chart-gridline" />
+      <text x="52" y="268" text-anchor="end">0</text>
+      <text x="52" y="168" text-anchor="end">{{ '%g'|format(peak / 2) }}</text>
+      <text x="52" y="68" text-anchor="end">{{ peak }}</text>
+      {% for bin in bins %}
+      {% set bar_height = 200 * bin.count / peak %}
+      <rect x="{{ 64 + loop.index0 * bar_width + 2 }}" y="{{ 262 - bar_height }}" width="{{ bar_width - 4 }}" height="{{ bar_height }}" class="histogram-bar"><title>{{ bin.left }} to {{ bin.right }}: {{ bin.count }} measurements</title></rect>
+      {% if bin.count %}<text x="{{ 64 + (loop.index0 + 0.5) * bar_width }}" y="{{ 252 - bar_height }}" text-anchor="middle" class="bar-label">{{ bin.count }}</text>{% endif %}
+      {% endfor %}
+      <text x="64" y="291">{{ '%.5g'|format(bins[0].left) }}</text>
+      <text x="824" y="291" text-anchor="end">{{ '%.5g'|format(bins[-1].right) }}</text>
+      <text x="444" y="327" text-anchor="middle">Height (source database units)</text>
+      <text x="20" y="162" text-anchor="middle" transform="rotate(-90 20 162)">Count</text>
+    </svg>
+    <figcaption>Source: <code>gluing_progress.height</code>. Units must be confirmed against the original database schema.</figcaption>
+  </figure>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Histogram bin counts">
+    <table class="histogram-table"><caption>Bin bounds and counts</caption><thead><tr><th scope="col">Lower bound (inclusive)</th><th scope="col">Upper bound</th><th scope="col">Count</th></tr></thead><tbody>{% for bin in bins %}<tr><td class="numeric">{{ bin.left }}</td><td class="numeric">{{ bin.right }}{% if loop.last %} (inclusive){% else %} (exclusive){% endif %}</td><td class="numeric">{{ bin.count }}</td></tr>{% endfor %}</tbody></table>
+  </div>
+  {% else %}<p class="empty-message">No finite height measurements are available to plot.</p>{% endif %}
+</section>
+{% endblock %}

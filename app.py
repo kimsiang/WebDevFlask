@@ -1,218 +1,233 @@
-#!/bin/python
-
-from flask import Flask, render_template, json, request
-from flaskext.mysql import MySQL
-
-mysql = MySQL()
-
-app = Flask(__name__)
-# MySQL configurations
-
-mysql.init_app(app)
-
-conn = mysql.connect()
-cursor = conn.cursor()
-
-#@app.route("/")
-#def main():
-#    return "Welcome!"
-#    return render_template('index.html')
-
-@app.route('/showSignUp')
-def showSignUp():
-    return render_template('signup.html')
-
-@app.route('/signUp',methods=['POST'])
-def signUp():
-    # read the posted values from the UI
-    _name = request.form['inputName']
-    _email = request.form['inputEmail']
-    _password = request.form['inputPassword']
-
-    # validate the received values
-    if _name and _email and _password:
-        #print "Welcome!"
-        return json.dumps({'html':'<span>All fields good !!</span>'})
-    else:
-        return json.dumps({'html':'<span>Enter the required fields</span>'})
-
-@app.route('/calorimeter')
-def calorimeter():
-
-    cursor.execute("SELECT calorimeter_id, built_date FROM calorimeter")
-
-    rows = cursor.fetchall()
-    return render_template('calorimeter.html', rows = rows)
-
-@app.route('/sipm')
-def sipm():
-
-    cursor.execute("SELECT sipm_id, package_id FROM sipm ORDER by sipm_id")
-
-    rows = cursor.fetchall()
-    return render_template('sipm.html', rows = rows)
-
-
-@app.route('/sipmQC', defaults={'page':1})
-@app.route('/sipmQC/<int:page>')
-def sipmQC(page):
-    cursor.execute('SELECT count(*) FROM sipm_qc_result WHERE run_type = "led" and sipm_id > 0 and subrun_no = 1')
-    (totalEntries,) = cursor.fetchall()
-    perpage=50
-    startat=(page-1)*perpage
-    cursor.execute('SELECT run_no, subrun_no, date, sipm_id, volt, curr, temp, gain, amp_avg FROM sipm_qc_result WHERE run_type = "led" and sipm_id > 0 and subrun_no = 1 ORDER by run_no LIMIT %s, %s;', (startat,perpage))
-    rows = cursor.fetchall()
-    return render_template('sipm_qc.html', rows = rows, total = totalEntries[0]/50, page=page)
-
-#@app.route('/sipmQC')
-#def sipmQC():
-#    cursor.execute("SELECT run_no, subrun_no, sipm_id, volt, curr, temp, gain, amp_avg FROM sipm_qc_result WHERE run_type = 'led' and sipm_id > 0 and subrun_no = 1 ORDER by sipm_id")
-#    rows = cursor.fetchall()
-#    return render_template('sipm_qc.html', rows = rows)
-
-@app.route('/crystalQC')
-def crystalQC():
-    cursor.execute("SELECT qc_id, serial_number, location, width_left, width_right, height_left, height_right, length, longitudinal_trans_avg_value from crystal_qc")
-
-    rows = cursor.fetchall()
-    return render_template('crystal_qc.html', rows = rows)
-
-@app.route('/pentapusQC')
-def pentapusQC():
-    cursor.execute("SELECT cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, impedence_j6, mean, max_min FROM pentapus_qc")
-
-    rows = cursor.fetchall()
-    return render_template('pentapus_qc.html', rows = rows)
-
-@app.route('/gluingProgress')
-def gluingProgress():
-
-    cursor.execute("SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, breakoutboard, pentapus_cable, pentapus_subcable, calo_xtal_num, start_time, stop_time FROM gluing_progress")
-    col_names = [i[0] for i in cursor.description]
-
-    rows = cursor.fetchall()
-    return render_template('gluing_progress.html', rows = rows, col_names = col_names)
-
-@app.route('/beaglebone')
-def beaglebone():
-
-    cursor.execute("SELECT beaglebone_id, ip_address FROM beaglebone")
-
-    rows = cursor.fetchall()
-    return render_template('beaglebone.html', rows = rows)
-
-@app.route('/bkprecision')
-def bkprecision():
-
-    cursor.execute("SELECT bkprecision_id, serial_number, calorimeter_id FROM bkprecision")
-
-    rows = cursor.fetchall()
-    return render_template('bkprecision.html', rows = rows)
-
-@app.route('/amc13')
-def amc13():
-
-    cursor.execute("SELECT serial_number, vendor, model, location, owner, deployment, spartan_t2, kintex_t1, status, notes FROM amc13")
-
-    rows = cursor.fetchall()
-    return render_template('amc13.html', rows = rows)
-
-@app.route('/microtca')
-def microtca():
-
-    cursor.execute("SELECT serial_number, vendor, model, location, owner, version, deployment, notes FROM utca_crate")
-
-    rows = cursor.fetchall()
-    return render_template('microtca.html', rows = rows)
-
-@app.route('/wfd5')
-def wfd5():
-
-    cursor.execute("SELECT serial_number, wfdps_sn, afe_sn, deployment, mmc_fwv, golden_fwv, master_fwv, channel_fwv, location, owner, status FROM wfd5")
-
-    rows = cursor.fetchall()
-    return render_template('wfd5.html', rows = rows)
-
-
-@app.route('/gbrew')
-def gbrew():
-
-    cursor.execute("SELECT name, cups, current_credit FROM g_brew")
-
-    rows = cursor.fetchall()
-    return render_template('gbrew.html', rows = rows)
-
-@app.route('/fiber')
-def fiber():
-
-    cursor.execute("SELECT bundle_id, fiber_id, p_out, prism_id FROM fiber")
-
-    rows = cursor.fetchall()
-    return render_template('fiber.html', rows = rows)
-
-@app.route('/panel')
-def panel():
-
-    cursor.execute("SELECT panel_id, bundle_id, bending_close, bending_far FROM front_panel")
-
-    rows = cursor.fetchall()
-    return render_template('panel.html', rows = rows)
-
-
-@app.route('/calo_vis/<caloNum>')
-def calo_vis(caloNum):
-    cursor.execute('SELECT crystal_serial_num, tab1.sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, pentapus_subcable, amp_avg FROM gluing_progress AS tab1 INNER JOIN sipm_qc_result AS tab2 ON tab1.sipm_id = tab2.sipm_id AND tab1.calo_id = {0} AND tab2.run_type = "led" AND tab2.subrun_no = 1 AND tab2.amp_avg < 100 GROUP by tab1.sipm_id ORDER BY tab1.calo_xtal_num DESC'.format(caloNum))
-
-    col_names = [i[0] for i in cursor.description]
-
-    rows = cursor.fetchall()
-    return render_template('calo_vis.html', rows = rows, col_names = col_names, caloNum = caloNum)
-
-import numpy as np
-from bokeh.plotting import figure
-from bokeh.resources import CDN
-from bokeh.embed import components
-
-@app.route('/histogram')
-def show_histogram():
-    cursor.execute("SELECT height FROM gluing_progress")
-    rows = cursor.fetchall()
-
-    height = [row[0] for row in rows]
-    # use numpy to calculate histogram
-    # bins and values
-    heights,edges = np.histogram(height)
-    # create a bokeh figure object
-    p = figure(title='SiPM Number')
-    # add the rectangles
-    p.quad(top=heights,bottom=0,
-            left=edges[:-1],right=edges[1:],
-            fill_color="orange",line_color="black")
-
-    figJS,figDiv = components(p,CDN)
-
-    rendered = render_template('histogram.html',
-            height=height,figJS=figJS,figDiv=figDiv)
-    return(rendered)
-
-
-@app.route('/circle')
-def circle():
-    return render_template('circle.html')
-
-@app.route('/pentapus_qc')
-def pentapus_qc():
-
-    cursor.execute("SELECT cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, impedence_j6, mean, max_min FROM pentapus_qc ORDER by cable_id")
-    rows = cursor.fetchall()
-
-    return render_template('pentapus_qc.html', rows = rows)
-
-
-@app.route('/')
-def main():
-    return render_template('index.html')
+"""Read-only Muon g-2 calorimeter database viewer.
+
+Importing this module never contacts MySQL. Use ``create_app`` for isolated
+instances, ``flask --app app run`` for development, or ``app:app`` with WSGI.
+"""
+
+from collections import defaultdict
+from decimal import Decimal, InvalidOperation
+
+from flask import Flask, abort, render_template
+import pymysql
+
+from charts import build_histogram
+from db import DatabaseUnavailable, close_db, configure_database, query
+
+
+# Identifiers are fixed application code; request values are bound parameters.
+TABLE_VIEWS = (
+    ("/calorimeter", "calorimeter", "calorimeter.html",
+     "SELECT calorimeter_id, built_date FROM calorimeter ORDER BY calorimeter_id"),
+    ("/sipm", "sipm", "sipm.html",
+     "SELECT sipm_id, package_id FROM sipm ORDER BY sipm_id"),
+    ("/crystalQC", "crystalQC", "crystal_qc.html",
+     "SELECT qc_id, serial_number, location, width_left, width_right, "
+     "height_left, height_right, length, longitudinal_trans_avg_value "
+     "FROM crystal_qc ORDER BY qc_id"),
+    ("/gluingProgress", "gluingProgress", "gluing_progress.html",
+     "SELECT calo_id, glued, crystal_serial_num, sipm_id, height, width, "
+     "breakoutboard, pentapus_cable, pentapus_subcable, calo_xtal_num, "
+     "start_time, stop_time FROM gluing_progress ORDER BY calo_id, calo_xtal_num"),
+    ("/beaglebone", "beaglebone", "beaglebone.html",
+     "SELECT beaglebone_id, ip_address FROM beaglebone ORDER BY beaglebone_id"),
+    ("/bkprecision", "bkprecision", "bkprecision.html",
+     "SELECT bkprecision_id, serial_number, calorimeter_id "
+     "FROM bkprecision ORDER BY bkprecision_id"),
+    ("/amc13", "amc13", "amc13.html",
+     "SELECT serial_number, vendor, model, location, owner, deployment, "
+     "spartan_t2, kintex_t1, status, notes FROM amc13 ORDER BY serial_number"),
+    ("/microtca", "microtca", "microtca.html",
+     "SELECT serial_number, vendor, model, location, owner, version, deployment, "
+     "notes FROM utca_crate ORDER BY serial_number"),
+    ("/wfd5", "wfd5", "wfd5.html",
+     "SELECT serial_number, wfdps_sn, afe_sn, deployment, mmc_fwv, golden_fwv, "
+     "master_fwv, channel_fwv, location, owner, status "
+     "FROM wfd5 ORDER BY serial_number"),
+    ("/gbrew", "gbrew", "gbrew.html",
+     "SELECT name, cups, current_credit FROM g_brew ORDER BY name"),
+    ("/fiber", "fiber", "fiber.html",
+     "SELECT bundle_id, fiber_id, p_out, prism_id FROM fiber "
+     "ORDER BY bundle_id, fiber_id"),
+    ("/panel", "panel", "panel.html",
+     "SELECT panel_id, bundle_id, bending_close, bending_far "
+     "FROM front_panel ORDER BY panel_id, bundle_id"),
+)
+
+PENTAPUS_SQL = (
+    "SELECT cable_id, impedence_j2, impedence_j3, impedence_j4, impedence_j5, "
+    "impedence_j6, mean, max_min FROM pentapus_qc ORDER BY cable_id"
+)
+
+# Retain the historical LED / subrun 1 / amplitude < 100 eligibility rule.
+# A LEFT JOIN preserves assembly records without eligible QC. Select the highest
+# eligible run_no explicitly; do not average or arbitrarily collapse tied runs.
+CALORIMETER_SQL = """
+SELECT assembly.crystal_serial_num, assembly.sipm_id, assembly.calo_xtal_num,
+       assembly.breakoutboard, assembly.pentapus_cable,
+       assembly.pentapus_subcable, qc.amp_avg
+FROM gluing_progress AS assembly
+LEFT JOIN sipm_qc_result AS qc
+  ON qc.sipm_id = assembly.sipm_id
+ AND qc.run_type = %s AND qc.subrun_no = %s AND qc.amp_avg < %s
+ AND qc.run_no = (
+     SELECT MAX(recent.run_no)
+     FROM sipm_qc_result AS recent
+     WHERE recent.sipm_id = assembly.sipm_id
+       AND recent.run_type = %s AND recent.subrun_no = %s
+       AND recent.amp_avg < %s
+ )
+WHERE assembly.calo_id = %s
+ORDER BY assembly.calo_xtal_num DESC, assembly.crystal_serial_num,
+         assembly.sipm_id, qc.amp_avg
+"""
+
+
+def calorimeter_grid(rows):
+    """Keep geometry fixed when records are missing, duplicated, or malformed."""
+    positions = defaultdict(list)
+    invalid_rows = []
+    for row in rows:
+        try:
+            numeric_location = Decimal(str(row[2]).strip())
+            valid = (numeric_location.is_finite() and 0 <= numeric_location < 54
+                     and numeric_location == numeric_location.to_integral_value())
+        except (InvalidOperation, TypeError, ValueError):
+            valid = False
+        if not valid:
+            invalid_rows.append(row)
+            continue
+        location = int(numeric_location)
+        positions[location].append(row)
+
+    grid = []
+    # Preserve the legacy DESC + float:right arrangement without assuming which
+    # physical side of the detector is being viewed.
+    for start in range(45, -1, -9):
+        grid_row = []
+        for location in range(start, start + 9):
+            records = positions[location]
+            grid_row.append({
+                "location": location,
+                "row": records[0] if len(records) == 1 else None,
+                "records": records,
+                "state": "missing" if not records else "present" if len(records) == 1 else "duplicate",
+            })
+        grid.append(grid_row)
+    return grid, invalid_rows
+
+
+def create_app(config=None):
+    """Create an app without connecting to the experiment database."""
+    application = Flask(__name__)
+    configure_database(application, config)
+    application.teardown_appcontext(close_db)
+
+    @application.after_request
+    def response_headers(response):
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+        response.headers.setdefault("Referrer-Policy", "same-origin")
+        # Detector and infrastructure records should not enter shared caches.
+        if response.mimetype == "text/html":
+            response.headers.setdefault("Cache-Control", "no-store")
+        return response
+
+    @application.errorhandler(DatabaseUnavailable)
+    @application.errorhandler(pymysql.MySQLError)
+    def database_unavailable(error):
+        # Never echo connection details, SQL, or credentials to a visitor.
+        code = error.args[0] if error.args and isinstance(error.args[0], int) else "unavailable"
+        application.logger.warning("Database request failed (%s, %s)", type(error).__name__, code)
+        return render_template(
+            "error.html", status_code=503, title="Database unavailable",
+            message="The database could not be reached or this request could not be completed. "
+                    "Check the database configuration and experiment network access, then try again.",
+        ), 503
+
+    @application.errorhandler(404)
+    def not_found(error):
+        return render_template(
+            "error.html", status_code=404, title="Page not found",
+            message="This page or record range is not available. Choose a section from the navigation.",
+        ), 404
+
+    @application.route("/")
+    def main():
+        return render_template("index.html")
+
+    def table_view(template, sql):
+        def show_table():
+            rows, col_names = query(sql)
+            return render_template(template, rows=rows, col_names=col_names)
+        return show_table
+
+    for path, endpoint, template, sql in TABLE_VIEWS:
+        application.add_url_rule(path, endpoint, table_view(template, sql))
+
+    @application.route("/sipmQC")
+    @application.route("/sipmQC/<int:page>")
+    def sipmQC(page=1):
+        if page < 1:
+            abort(404)
+        criteria = "run_type = %s AND sipm_id > 0 AND subrun_no = %s"
+        counts, _ = query("SELECT COUNT(*) FROM sipm_qc_result WHERE " + criteria, ("led", 1))
+        total_entries = int(counts[0][0])
+        per_page = 50
+        total_pages = max(1, (total_entries + per_page - 1) // per_page)
+        if page > total_pages:
+            abort(404)
+        rows, _ = query(
+            "SELECT run_no, subrun_no, date, sipm_id, volt, curr, temp, gain, amp_avg "
+            "FROM sipm_qc_result WHERE " + criteria +
+            " ORDER BY run_no, sipm_id, subrun_no, date, volt, curr, temp, gain, amp_avg "
+            "LIMIT %s OFFSET %s", ("led", 1, per_page, (page - 1) * per_page),
+        )
+        page_numbers = sorted({1, total_pages, *range(max(1, page - 2), min(total_pages, page + 2) + 1)})
+        return render_template(
+            "sipm_qc.html", rows=rows, total_entries=total_entries,
+            total_pages=total_pages, page=page, per_page=per_page,
+            page_numbers=page_numbers,
+        )
+
+    @application.route("/pentapusQC")
+    @application.route("/pentapus_qc", endpoint="pentapus_qc")
+    def pentapusQC():
+        rows, col_names = query(PENTAPUS_SQL)
+        return render_template("pentapus_qc.html", rows=rows, col_names=col_names)
+
+    @application.route("/calo_vis/<int:caloNum>")
+    def calo_vis(caloNum):
+        if not 1 <= caloNum <= 24:
+            abort(404)
+        rows, col_names = query(CALORIMETER_SQL, ("led", 1, 100, "led", 1, 100, caloNum))
+        grid_rows, invalid_rows = calorimeter_grid(rows)
+        return render_template(
+            "calo_vis.html", rows=rows, col_names=col_names, caloNum=caloNum,
+            grid_rows=grid_rows, invalid_rows=invalid_rows,
+        )
+
+    @application.route("/histogram")
+    def show_histogram():
+        rows, _ = query("SELECT height FROM gluing_progress")
+        return render_template("histogram.html", **build_histogram(rows))
+
+    @application.route("/circle")
+    def circle():
+        return render_template("circle.html")
+
+    @application.route("/showSignUp")
+    @application.route("/signUp", methods=["POST"])
+    def signup_unavailable():
+        return render_template(
+            "error.html", status_code=410, title="Read-only viewer",
+            message="Account registration is not available. This application displays existing "
+                    "database records; access is managed by your experiment's network and authentication service.",
+        ), 410
+
+    return application
+
+
+app = create_app()
 
 if __name__ == "__main__":
-    app.debug=True
-    app.run(host='0.0.0.0', port=8888)
+    app.run(host="127.0.0.1", port=8888, debug=False)

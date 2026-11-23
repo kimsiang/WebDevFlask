@@ -1,46 +1,45 @@
 {% extends "layout.html" %}
-
-{% block body %}	
-
-<style>td {float: right; width: 11.11%}</style>
-<style>b {font-size: 13px; float: right;color: blue;}</style>
-<style>b2 {font-size: 13px;float: left;color: black;}</style>
-
-
-<h2 align="center">
-        {% if caloNum|int > 1 %}
-        <a class="fa fa-caret-square-o-left fa-lg" aria-hidden="true" href="/calo_vis/{{ caloNum|int - 1 }}"></a>
+{% set title = "Calorimeter " ~ caloNum %}
+{% block body %}
+<section class="data-panel calo-panel" aria-labelledby="calo-title">
+  <header class="panel-heading">
+    <div><p class="eyebrow">Crystal–SiPM assignments</p><h1 id="calo-title">Calorimeter {{ caloNum }}</h1><p class="muted">Location numbers follow the legacy layout: 45–53 on the top row, 0–8 on the bottom row.</p></div>
+    <nav class="pagination" aria-label="Calorimeter navigation">
+      {% if caloNum > 1 %}<a href="{{ url_for('calo_vis', caloNum=caloNum - 1) }}" rel="prev">Previous</a>{% endif %}
+      <a href="{{ url_for('calorimeter') }}">All calorimeters</a>
+      {% if caloNum < 24 %}<a href="{{ url_for('calo_vis', caloNum=caloNum + 1) }}" rel="next">Next</a>{% endif %}
+    </nav>
+  </header>
+  <p class="panel-note">This is a location schematic. Empty slots indicate no matching assembly record; duplicate records are identified for review.</p>
+  <div class="calo-scroll" tabindex="0" role="region" aria-label="Calorimeter location schematic; scroll horizontally on small screens">
+    <div class="calo-grid">
+      {% for grid_row in grid_rows %}
+      {% for cell in grid_row %}
+      <article class="calo-cell calo-cell-{{ cell.state }}" aria-label="Location {{ cell.location }}: {{ cell.state }}">
+        <h2><span>Location</span> {{ cell.location }}</h2>
+        {% if cell.state == 'missing' %}<p class="cell-status">No record</p>
+        {% elif cell.state == 'duplicate' %}<p class="cell-status">Duplicate records</p><p>{{ cell.records|length }} rows. See the detailed table below.</p>
+        {% else %}
+        {% set row = cell.row %}
+        <dl>
+          <dt>Crystal</dt><dd>{{ row[0] if row[0] is not none else '—' }}</dd>
+          <dt>SiPM</dt><dd>{{ row[1] if row[1] is not none else '—' }}</dd>
+          <dt>BEAG</dt><dd>{{ row[3] if row[3] is not none else '—' }}</dd>
+          <dt>SIG</dt><dd>{{ row[4] if row[4] is not none else '—' }} / {{ row[5] if row[5] is not none else '—' }}</dd>
+          {% set board = (row[3]|string).split('-') if row[3] is not none else [] %}
+          <dt>HDMI*</dt><dd>{% if board|length == 2 and board[1].isdigit() and board[1]|int(none) is not none %}{{ 'S' if board[1]|int > 10 else 'L' }}-{{ cell.location + 1 }}{% else %}—{% endif %}</dd>
+          <dt>QC amplitude</dt><dd>{{ row[6] if row[6] is not none else '—' }}</dd>
+        </dl>
         {% endif %}
-        {% if caloNum|int < 24 %}
-        <a class="fa fa-caret-square-o-right fa-lg" aria-hidden="true" href="/calo_vis/{{ caloNum|int + 1 }}"></a>
-        {% endif %}
-        <br>
-        <div class="page-break"></div>
-        Calorimeter {{ caloNum }}
-</h2>
-
-<table class="table table-hover table-condensed table-bordered">
-    {% set count = 0 %}
-    {% for crystal_serial_num, sipm_id, calo_xtal_num, breakoutboard, pentapus_cable, pentapus_subcable, amp_avg in rows %}
-    {% set count = count + 1 %} 
-    {% if count % 9 == 1 %}<tr>{% endif %}
-            <td><b2>LOC:</b2> <b>{{ calo_xtal_num }}</b>
-            <br><b2>Xtal:</b2> <b>{{ crystal_serial_num }}</b>
-            <br><b2>SiPM:</b2> <b>{{ sipm_id }}</b>
-            <br><b2>BEAG:</b2> <b>{{ breakoutboard }}</b>
-            {% set slot1, slot2 =  breakoutboard.split('-') %}
-            <br><b2>SIG:</b2> <b>{{ pentapus_cable }}-{{ pentapus_subcable }}</b> 
-            <br><b2>HDMI:</b2> <b>{% if slot2|int > 10 %}S-{{ calo_xtal_num + 1 }} {% else %}L-{{ calo_xtal_num + 1 }} {% endif %}</b>
-                     <br><b2>AvgAmp(QC):</b2> <b>{{ amp_avg }}</b> 
-            </td>
-        {% if calo_xtal_num % 9 == 0 %}</tr>{% endif %} 
-    {% endfor %}
-</table>
-
-<p id="demo"></p>
-
-<script>
-document.getElementById("demo").innerHTML = 'Generated: ' + Date();
-</script>
-
-{% endblock body %}
+      </article>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+  <p class="panel-note">QC amplitude uses the highest eligible run number for each SiPM: LED, subrun 1, amplitude &lt; 100. Tied records are flagged; a missing amplitude means no eligible QC result. * HDMI uses the legacy breakout-board suffix rule where that value can be parsed.</p>
+  {% if invalid_rows %}<p class="notice">{{ invalid_rows|length }} records have a missing or invalid location. They are retained in the detailed table below.</p>{% endif %}
+</section>
+{% with title = 'Detailed assignments', description = 'All returned rows are shown, including duplicate and invalid-location records.', headers = ['Crystal serial number', 'SiPM ID', 'Location', 'Breakout board', 'Pentapus cable', 'Pentapus subcable', 'AvgAmp (QC)'], secondary_table = true %}
+{% include "_table.html" %}
+{% endwith %}
+{% endblock %}

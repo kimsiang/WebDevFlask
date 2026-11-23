@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link href="{{ url_for('static', filename='css/circle.css')}}?v=3" rel="stylesheet">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    </head>
-
-    <body>
-
-        Number of calos: <input type="text" value="24"/> 
-        <br>
-        <br>
-        <div id="container">
-                <!--     <div id="center"></div> 
-                    <div id="crosshair-x"></div>
-                    <div id="crosshair-y"></div>
-                -->
-        </div>
-
-        <script src="{{ url_for('static', filename='js/circle.js')}}?v=2"></script>
-    </body>
-
-</html>
+{% extends "layout.html" %}
+{% set title = "Calorimeter selector" %}
+{% block body %}
+<section class="data-panel" aria-labelledby="page-title"><header class="panel-heading"><div><p class="eyebrow">Detector navigation</p><h1 id="page-title">Calorimeter selector</h1><p class="muted">Choose a calorimeter to view its crystal–SiPM assignments. The desktop ring is a schematic selector, numbered clockwise from the top.</p></div></header>
+<div class="ring-selector-wrap">
+  <p class="ring-center" aria-hidden="true"><strong>24</strong><span>calorimeters</span><small>Schematic selector</small></p>
+  <nav class="calorimeter-selector ring-selector" aria-label="Select one of the 24 calorimeters">{% for number in range(1, 25) %}<a href="{{ url_for('calo_vis', caloNum=number) }}"><span>Calorimeter</span><strong>{{ number }}</strong></a>{% endfor %}</nav>
+</div>
+<details class="source-figure"><summary>Original storage-ring reference</summary><figure><img src="{{ url_for('static', filename='images/vacuumchamber.png') }}" alt="Legacy storage-ring drawing with calorimeter numbers and labeled ring components." width="1017" height="762" loading="lazy"><figcaption>Original image retained from this repository. The selector above is schematic and does not establish a physical viewing orientation.</figcaption></figure></details>
+</section>
+{% endblock %}
